@@ -1,0 +1,120 @@
+<?php
+
+use Fisharebest\Webtrees\Http\RequestHandlers\ControlPanel;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\View;
+
+/**
+ * @var string  $title
+ * @var string  $language
+ * @var array   $source_code_paths
+ * @var array   $translations_stats
+ * @var array   $missing_translations
+ * @var array   $non_used_translations
+ */
+
+?>
+
+<?= view('components/breadcrumbs', ['links' =>
+    [
+        route(ControlPanel::class) => I18N::translate('Control panel'),
+        route('modules') => I18N::translate('Modules'),
+        e($title)
+    ]
+]) ?>
+
+<h1><?= e($title) ?></h1>
+
+<h2><?= I18N::translate('Translations status') ?> - <?= e($language) ?></h2>
+
+<div class="maj-translationtool-sourcecodepaths">
+    <h3><?= e(I18N::translate('Paths for source code')) ?></h3>
+    
+    <?php foreach ($source_code_paths as $source_code_path) : ?>
+        <samp><?= e($source_code_path) ?></samp><br>
+    <?php endforeach; ?>
+</div>
+
+<div class="maj-translationtool-statistics">
+    <h3><?= e(I18N::translate('Statistics')) ?></h3>
+        
+    <table class="table table-bordered">
+        <tr>
+            <td><?= e(I18N::translate('Number of translations')) ?></td>
+            <td><?= e(I18N::number($translations_stats['nbTranslations'])) ?></td>
+        </tr>
+        <tr>
+            <td><?= e(I18N::translate('Number of translations in MyArtJaub modules')) ?></td>
+            <td><?= e(I18N::number($translations_stats['nbMajTranslations'])) ?></td>
+        </tr>
+        <tr>
+            <td><?= e(I18N::translate('Number of translations found in code')) ?></td>
+            <td><?= e(I18N::number($translations_stats['nbTranslationsFound'])) ?></td>
+        </tr>
+    </table>
+
+</div>
+
+<?php if (!empty($missing_translations)) : ?>
+<div class="maj-translationtool-missingtranslations">
+    <h3><?= e(I18N::translate('Missing translations (%s)', I18N::number(count($missing_translations)))) ?></h3>
+    
+    <table class="maj-translationtool-missing-table table table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?= e(I18N::translate('Module')) ?></th>
+                <th><?= e(I18N::translate('Message')) ?></th>
+                <th><?= e(I18N::translate('References')) ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($missing_translations as $missing_info) : ?>
+                <?php  $references = collect($missing_info[1]->getReferences()->toArray())->sortKeys()
+                      ->flatMap(function ($ref_lines, $ref_file) {
+                          $ref_file_path = realpath($ref_file);
+                          return collect($ref_lines)->sort()->map(function ($ref_line) use ($ref_file_path) {
+                              return '<small><samp>' . e($ref_file_path . ':' . $ref_line) . '</samp></small>';
+                          });
+                      }); ?>
+            <tr>
+                <td><?= e((string) $missing_info[0]->getDomain()) ?></td>
+                <td><?= e((string) $missing_info[1]->getOriginal()); ?></td>
+                <td><?= $references->implode('<br>') ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<?php endif ?>
+
+<?php if (!empty($non_used_translations)) : ?>
+<div class="maj-translationtool-notusedtranslations">
+    <h3><?= e(I18N::translate('Non used MyArtJaub translations (%s)', I18N::number(count($non_used_translations)))) ?></h3>
+    
+    <table class="maj-translationtool-notused-table table table-condensed table-bordered">
+        <thead>
+            <tr>
+                <th><?= e(I18N::translate('Module')) ?></th>
+                <th><?= e(I18N::translate('Message')) ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($non_used_translations as $non_used) : ?>
+            <tr>
+                <td><?= e((string) $non_used[0]) ?></td>
+                <td><?= e((string) $non_used[1]) ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<?php endif; ?>
+
+<?php View::push('javascript') ?>
+<script>
+  'use strict';
+
+  $(".maj-translationtool-missing-table").dataTable();
+  $(".maj-translationtool-notused-table").dataTable();
+</script>
+<?php View::endpush() ?>

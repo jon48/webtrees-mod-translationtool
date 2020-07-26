@@ -1,0 +1,9 @@
+
+parameters:
+   level: max
+   paths:
+      - app
+      - resources
+   ignoreErrors:
+      - '#^Call to an undefined method Aura\\Router\\Map::extras\(\)\.$#'
+   checkMissingIterableValueType: false

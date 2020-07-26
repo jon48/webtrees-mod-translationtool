@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -11,10 +12,10 @@
 
 return array (
 
-    'Translation Tool'		        =>	'Outil de traduction',
-    'Manage webtrees translation.'	=>	'Gère les traductions de webtrees',
-    'Translations status'			=>	'Statut des traductions',
-    'Missing translations (%s)'		=>	'Traductions manquantes (%s)',
+    'Translation Tool'              =>  'Outil de traduction',
+    'Manage webtrees translation.'  =>  'Gère les traductions de webtrees',
+    'Translations status'           =>  'Statut des traductions',
+    'Missing translations (%s)'     =>  'Traductions manquantes (%s)',
     'Non used MyArtJaub translations (%s)'
                                     =>  'Traductions MyArtJaub non utilisés (%s)',
     'Number of translations'        =>  'Nombre de traductions',

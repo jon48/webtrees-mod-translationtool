@@ -1,0 +1,45 @@
+{
+	"name" : "jon48/webtrees-mod-translationtool",
+	"description" : "MyArtJaub Translations Module for webtrees",
+	"type" : "webtrees-module",
+	"keywords" : [
+		"webtrees",
+		"genealogy",
+		"internationalisation",
+		"webtrees-module"
+	],
+	"homepage" : "https://github.com/jon48/webtrees-mod-translationtool",
+	"license" : "GPL-3.0-or-later",
+	"authors" : [{
+			"name" : "Jonathan Jaubart",
+			"email" : "dev@jaubart.com",
+			"homepage" : "http://www.jaubart.com",
+			"role" : "Developer"
+		}
+	],
+	"support" : {
+		"issues" : "https://github.com/jon48/webtrees-mod-translationtool/issues"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"MyArtJaub\\Webtrees\\Module\\TranslationTool\\" : "app"
+		}
+	},
+	"require" : {
+		"composer/composer" : "~1.0",
+		"fisharebest/localization" : "~1.0",
+		"gettext/gettext" : "~5.0",
+		"gettext/php-scanner" : "~1.0",
+		"fisharebest/webtrees" : "~2.0,>=2.0.6",
+		"jon48/webtrees-lib" : "dev-feature/2.0"
+	},
+    "scripts": {
+        "webtrees-mod-translationtool:phpcs" : "phpcs -s",
+        "webtrees-mod-translationtool:phpcbf" : "phpcbf",
+        "webtrees-mod-translationtool:phpstan" : "phpstan analyze",
+        "webtrees-mod-translationtool:sonar" : "sonar-scanner"
+    },
+	"extra" : {
+		"installer-name" : "myartjaub_translationtool"
+	}
+}
