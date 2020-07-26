@@ -1,0 +1,10 @@
+filter:
+    paths:
+       - app/*
+       - resources/*
+build:
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
