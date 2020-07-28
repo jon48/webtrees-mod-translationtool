@@ -31,13 +31,13 @@ use Psr\Http\Server\RequestHandlerInterface;
 class TranslationStatus implements RequestHandlerInterface
 {
     use ViewResponseTrait;
-    
-    /** @var TranslationToolModule $module */
+
+    /** @var ?TranslationToolModule $module */
     private $module;
-    
+
     /** @var SourceCodeService $sourcecode_service */
     private $sourcecode_service;
-    
+
     /**
      * Constructor for TranslationStatus request handler
      *
@@ -49,7 +49,7 @@ class TranslationStatus implements RequestHandlerInterface
         $this->module = $module_service->findByInterface(TranslationToolModule::class)->first();
         $this->sourcecode_service = $sourcecode_service;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Psr\Http\Server\RequestHandlerInterface::handle()
@@ -57,11 +57,11 @@ class TranslationStatus implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->layout = 'layouts/administration';
-        
+
         if ($this->module === null) {
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
-        
+
         $locale = I18N::locale();
         $sourceCodePaths = $this->sourcecode_service->sourceCodePaths();
         $translation_analyser = new TranslationsAnalyzer(
@@ -69,7 +69,7 @@ class TranslationStatus implements RequestHandlerInterface
             $sourceCodePaths,
             $locale->languageTag()
         );
-        
+
         return $this->viewResponse($this->module->name() . '::status', [
             'title'                 =>  $this->module->title(),
             'language'              =>  $locale->endonym(),

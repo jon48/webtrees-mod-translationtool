@@ -3,9 +3,9 @@ name: Code style PHP
 on: [push, pull_request]
 
 jobs:
-  run:
+  phpcs:
     runs-on: ubuntu-latest
-    name: PHP/PHTML
+    name: phpcs PHP/PHTML
 
     steps:
       - uses: actions/checkout@v1

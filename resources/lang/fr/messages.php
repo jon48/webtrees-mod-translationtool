@@ -25,5 +25,5 @@ return array (
                                     =>  'Nombre de traductions dans les modules MyArtJaub',
     'Paths for source code'         =>  'Chemins du code source',
     'References'                    =>  'Références',
-    
+
 );

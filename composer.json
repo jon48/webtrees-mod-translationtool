@@ -43,6 +43,7 @@
     "webtrees-mod-translationtool:phpcs": "phpcs -s",
     "webtrees-mod-translationtool:phpcbf": "phpcbf",
     "webtrees-mod-translationtool:phpstan": "phpstan analyze",
+    "webtrees-mod-translationtool:psalm": "psalm",
     "webtrees-mod-translationtool:sonar": "sonar-scanner"
   },
   "extra": {

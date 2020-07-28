@@ -26,7 +26,7 @@ use Fisharebest\Webtrees\Webtrees;
  */
 class ComposerService
 {
-    
+
     /**
      * Checks whether a Composer package is a MyArtJaub one.
      *
@@ -38,13 +38,13 @@ class ComposerService
         list($vendor) = explode('/', $package->getName(), 2);
         return $vendor == self::MYARTJAUB_VENDOR;
     }
-    
+
     /**
      * Name of the MyArtJaub modules' vendor
      * @var string MYARTJAUB_VENDOR
      * */
     private const MYARTJAUB_VENDOR = 'jon48';
-    
+
     /**
      * List all the PSR-4 paths used in MyArtJaub packages autoloading.
      * The returned array is composed of items with the structure:
@@ -58,11 +58,11 @@ class ComposerService
     public function listMyArtJaubPackagesPaths(): array
     {
         $composer = Factory::create(new NullIO(), Webtrees::ROOT_DIR . 'composer.json');
-        
+
         $packages = $composer->getRepositoryManager()
             ->getLocalRepository()
             ->getPackages();
-            
+
         /** @var array<PackageInterface> $maj_packages */
         $maj_packages = array();
         foreach ($packages as $package) {
@@ -70,10 +70,10 @@ class ComposerService
                 $maj_packages[] = $this->extractPsr4Paths($composer, $package);
             }
         }
-        
+
         return $maj_packages;
     }
-    
+
     /**
      * Extract and normalise the PSR-4 paths used in a package autoloading.
      * The returned array is a 2-tuple with the structure:
@@ -89,7 +89,7 @@ class ComposerService
     private function extractPsr4Paths(Composer $composer, PackageInterface $package): array
     {
         $autoload_generator = $composer->getAutoloadGenerator();
-        
+
         $package_map = $autoload_generator->buildPackageMap(
             $composer->getInstallationManager(),
             $composer->getPackage(),

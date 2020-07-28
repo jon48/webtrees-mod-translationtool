@@ -27,41 +27,41 @@ use ReflectionClass;
 class TranslationsAnalyzer
 {
 
-   
-    
+
+
     /** @var SourceCodeService $sourcecode_service */
     private $sourcecode_service;
-    
+
     /**
      * List of items to be translated found in the code.
-     * @var Collection $strings_to_translate
+     * @var ?Collection $strings_to_translate
      */
     private $strings_to_translate;
-    
+
     /**
      * List of translations loaded through the standard I18N library.
-     * @var Collection $loaded_translations
+     * @var ?Collection $loaded_translations
      */
     private $loaded_translations;
-    
+
     /**
      * List of translations loaded within the MyArtJaub modules
-     * @var Collection $maj_translations
+     * @var ?Collection $maj_translations
      */
     private $maj_translations;
-    
+
     /**
      * List of paths for source code
      * @var Collection $source_code_paths
      */
     private $source_code_paths;
-    
+
     /**
      * Reference language code
      * @var string $language
      */
     private $language;
-    
+
     /**
      * Constructor for TranslationAnalyzer
      *
@@ -75,11 +75,11 @@ class TranslationsAnalyzer
         $this->language = $language ?? I18N::locale()->languageTag();
         $this->source_code_paths = $code_paths;
     }
-    
+
     /******************************
      *  Data retrieval functions  *
      ******************************/
-    
+
     /**
      * Compute the key for a given GetText Translation entry, dealing with context \x04 and plural \x00 cases.
      *
@@ -89,15 +89,17 @@ class TranslationsAnalyzer
     private function getTranslationKey(Translation $translation): string
     {
         $key = $translation->getOriginal();
-        if ($translation->getPlural() !== null && strlen($translation->getPlural()) > 0) {
-            $key .= I18N::PLURAL . $translation->getPlural();
+        $translation_plural = $translation->getPlural();
+        if ($translation_plural !== null && strlen($translation_plural) > 0) {
+            $key .= I18N::PLURAL . $translation_plural;
         }
-        if ($translation->getContext() !== null && strlen($translation->getContext()) > 0) {
-            $key = $translation->getContext() . I18N::CONTEXT . $key;
+        $translation_context = $translation->getContext();
+        if ($translation_context !== null && strlen($translation_context) > 0) {
+            $key = $translation_context . I18N::CONTEXT . $key;
         }
         return $key;
     }
-    
+
     /**
      * Returns the strings tagged for translation in the source code.
      * The returned structure is an associative Collection with :
@@ -113,7 +115,7 @@ class TranslationsAnalyzer
     {
         if ($this->strings_to_translate === null) {
             $strings_to_translate_list = $this->sourcecode_service->findStringsToTranslate($this->source_code_paths);
-            
+
             $this->strings_to_translate = new Collection();
             foreach ($strings_to_translate_list as $translations) {
                 foreach ($translations as $translation) {
@@ -124,7 +126,7 @@ class TranslationsAnalyzer
         }
         return $this->strings_to_translate;
     }
-    
+
     /**
      * Returns the list of translations loaded through the standard I18N library.
      * The returned structure is an associative Collection with :
@@ -136,11 +138,11 @@ class TranslationsAnalyzer
     private function loadedTranslations(): Collection
     {
         if ($this->loaded_translations === null) {
-            $I18N_class = new ReflectionClass('\\Fisharebest\\Webtrees\\I18N');
+            $I18N_class = new ReflectionClass(I18N::class);
             $translator_property = $I18N_class->getProperty('translator');
             $translator_property->setAccessible(true);
             $wt_translator = $translator_property->getValue();
-            
+
             $translator_class = new ReflectionClass(get_class($wt_translator));
             $translations_property = $translator_class->getProperty('translations');
             $translations_property->setAccessible(true);
@@ -148,7 +150,7 @@ class TranslationsAnalyzer
         }
         return $this->loaded_translations;
     }
-    
+
     /**
      * Returns the list of translations loaded in MyArtJaub modules.
      * The returned structure is an associative Collection with :
@@ -164,7 +166,7 @@ class TranslationsAnalyzer
     {
         if ($this->maj_translations === null) {
             $maj_translations_list = $this->sourcecode_service->listMyArtJaubTranslations($this->language);
-            
+
             $this->maj_translations = new Collection();
             foreach ($maj_translations_list as $module => $maj_mod_translations) {
                 foreach (array_keys($maj_mod_translations) as $maj_mod_translation) {
@@ -174,12 +176,12 @@ class TranslationsAnalyzer
         }
         return $this->maj_translations;
     }
-    
+
     /*************************
      *  Analyzer functions   *
      *************************/
-    
-    
+
+
     /**
      * Returns the translations missing through the standard I18N.
      * The returned array is composed of items with the structure:
@@ -199,10 +201,10 @@ class TranslationsAnalyzer
                 $missing_translations[] = $translation_info;
             }
         }
-        
+
         return $missing_translations;
     }
-    
+
     /**
      * Returns the translations defined in the MaJ modules, but not actually used in the code.
      * The returned array is composed of items with the structure:
@@ -224,7 +226,7 @@ class TranslationsAnalyzer
         }
         return $removed_translations;
     }
-    
+
     /**
      * Get some statistics about the translations data.
      * Returns an array with the statistics:

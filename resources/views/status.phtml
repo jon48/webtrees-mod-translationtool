@@ -70,9 +70,9 @@ use Fisharebest\Webtrees\View;
         <tbody>
             <?php foreach ($missing_translations as $missing_info) : ?>
                 <?php  $references = collect($missing_info[1]->getReferences()->toArray())->sortKeys()
-                      ->flatMap(function ($ref_lines, $ref_file) {
+                      ->flatMap(function (array $ref_lines, string $ref_file) {
                           $ref_file_path = realpath($ref_file);
-                          return collect($ref_lines)->sort()->map(function ($ref_line) use ($ref_file_path) {
+                          return collect($ref_lines)->sort()->map(function (int $ref_line) use ($ref_file_path) {
                               return '<small><samp>' . e($ref_file_path . ':' . $ref_line) . '</samp></small>';
                           });
                       }); ?>
