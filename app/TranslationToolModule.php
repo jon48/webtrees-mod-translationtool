@@ -17,16 +17,22 @@ namespace MyArtJaub\Webtrees\Module\TranslationTool;
 use Aura\Router\Map;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Http\Middleware\AuthAdministrator;
+use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
-use MyArtJaub\Webtrees\Module\AbstractModuleMaj;
+use Fisharebest\Webtrees\Module\ModuleConfigTrait;
+use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
+use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
 use MyArtJaub\Webtrees\Module\TranslationTool\Http\RequestHandlers\TranslationStatus;
 
 /**
  * MyArtJaub Translation tool Module.
  * This module helps with managing translations introduced by the MyArtJaub modules.
  */
-class TranslationToolModule extends AbstractModuleMaj implements ModuleConfigInterface
+class TranslationToolModule extends AbstractModule implements ModuleMyArtJaubInterface, ModuleConfigInterface
 {
+    use ModuleMyArtJaubTrait;
+    use ModuleConfigTrait;
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\AbstractModule::title()
@@ -35,7 +41,7 @@ class TranslationToolModule extends AbstractModuleMaj implements ModuleConfigInt
     {
         return I18N::translate('Translation Tool');
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
@@ -44,31 +50,31 @@ class TranslationToolModule extends AbstractModuleMaj implements ModuleConfigInt
     {
         return I18N::translate('Manage webtrees translation.');
     }
-    
+
     public function customModuleVersion(): string
     {
-        return '2.0.6-v.1';
+        return '2.0.11-v.1';
     }
-    
+
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AbstractModuleMaj::customModuleSupportUrl()
+     * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleSupportUrl()
      */
     public function customModuleSupportUrl(): string
     {
         return 'https://github.com/jon48/webtrees-mod-translationtool';
     }
-    
+
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AbstractModuleMaj::loadRoutes()
+     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
      */
     public function loadRoutes(Map $router): void
     {
-        $router->attach('', '', static function (Map $router) {
+        $router->attach('', '', static function (Map $router): void {
 
-            
-            $router->attach('', '/module-maj/translationtool', static function (Map $router) {
+
+            $router->attach('', '/module-maj/translationtool', static function (Map $router): void {
 
                 $router->extras([
                     'middleware' => [
@@ -79,7 +85,7 @@ class TranslationToolModule extends AbstractModuleMaj implements ModuleConfigInt
             });
         });
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleConfigInterface::getConfigLink()

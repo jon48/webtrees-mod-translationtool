@@ -17,20 +17,20 @@ namespace MyArtJaub\Webtrees\Module\TranslationTool\Services;
 use Composer\Package\PackageInterface;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Gettext\Merge;
-use Gettext\Scanner\PhpScanner;
 use Gettext\Translations;
+use Gettext\Scanner\PhpScanner;
 use Illuminate\Support\Collection;
-use MyArtJaub\Webtrees\Module\AbstractModuleMaj;
+use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 
 /**
  * Service for extracting data from the webtrees and modules source code.
  */
 class SourceCodeService
 {
-    
+
     /**
      * Gettext Translations merge strategy to be used - Use Theirs data
-     * @var unknown
+     * @var int MERGE_STRATEGY_THEIRS
      */
     private const MERGE_STRATEGY_THEIRS = Merge::HEADERS_OVERRIDE
         | Merge::TRANSLATIONS_THEIRS
@@ -39,7 +39,7 @@ class SourceCodeService
         | Merge::REFERENCES_THEIRS
         | Merge::FLAGS_THEIRS
         | Merge::COMMENTS_THEIRS;
-    
+
     /**
      * I18N functions to be looked for in the code
      * @var array
@@ -49,7 +49,7 @@ class SourceCodeService
         'plural' => 'ngettext',
         'translateContext' => 'pgettext'
     ];
-    
+
     /**
      * Lists all paths containing source code to be scanned for translations.
      * This contains the MyArtJaub modules's resources folder,
@@ -59,13 +59,13 @@ class SourceCodeService
      */
     public function sourceCodePaths(): Collection
     {
-        $paths = app(ModuleService::class)->findByInterface(AbstractModuleMaj::class)
-            ->mapWithKeys(function (AbstractModuleMaj $module) {
+        $paths = app(ModuleService::class)->findByInterface(ModuleMyArtJaubInterface::class)
+            ->mapWithKeys(function (ModuleMyArtJaubInterface $module): array {
                 return [$module->name() => [realpath($module->resourcesFolder())]];
             });
-        
+
         $maj_packages = app(ComposerService::class)->listMyArtJaubPackagesPaths();
-        
+
         foreach ($maj_packages as list($maj_package, $psr4_paths)) {
             /** @var PackageInterface $maj_package */
             $installer_name = $maj_package->getExtra()['installer-name'] ?? '';
@@ -74,10 +74,10 @@ class SourceCodeService
                 $paths->put($key, array_merge($paths->get($key, []), $psr4_paths));
             }
         }
-        
+
         return $paths;
     }
-    
+
     /**
      * Find all strings to be translated in PHP or PHTML files for a set of source code paths
      * The returned structure is a associated Collection with:
@@ -96,7 +96,7 @@ class SourceCodeService
                 $php_files = array_merge($php_files, $this->glob_recursive($path . '/*.php') ?: array());
                 $php_files = array_merge($php_files, $this->glob_recursive($path . '/*.phtml') ?: array());
             }
-            
+
             $php_scanner = new PhpScanner(Translations::create($package));
             $php_scanner
                 ->setFunctions(self::I18N_FUNCTIONS)
@@ -105,7 +105,7 @@ class SourceCodeService
             foreach ($php_files as $php_file) {
                 $php_scanner->scanFile($php_file);
             }
-            
+
             $strings_to_translate->put(
                 $package,
                 $strings_to_translate
@@ -115,7 +115,7 @@ class SourceCodeService
         }
         return $strings_to_translate;
     }
-    
+
     /**
      * List all translations defined in MyArtJaub modules
      * The returned structure is a associated Collection with:
@@ -127,12 +127,12 @@ class SourceCodeService
      */
     public function listMyArtJaubTranslations(string $language): Collection
     {
-        return app(ModuleService::class)->findByInterface(AbstractModuleMaj::class)
-            ->mapWithKeys(function (AbstractModuleMaj $module) use ($language) {
+        return app(ModuleService::class)->findByInterface(ModuleMyArtJaubInterface::class)
+            ->mapWithKeys(function (ModuleMyArtJaubInterface $module) use ($language): array {
                 return [$module->name() => $module->customTranslations($language)];
             });
     }
-    
+
     /**
      * Extension of the standard PHP glob function to apply it recursively.
      *
@@ -146,11 +146,11 @@ class SourceCodeService
     {
         $files = glob($pattern, $flags) ?: [];
         $dirs = glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT) ?: [];
-        
+
         foreach ($dirs as $dir) {
             $files = array_merge($files, $this->glob_recursive($dir . '/' . basename($pattern), $flags));
         }
-        
+
         return $files;
     }
 }
