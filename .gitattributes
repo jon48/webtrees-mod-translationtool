@@ -1,0 +1,14 @@
+# Exclude files from archive
+
+.gitattributes  export-ignore
+.gitignore      export-ignore
+
+RoboFile.php    export-ignore
+
+# CI tools
+.github/                    export-ignore
+.scrutinizer.yml            export-ignore
+phpcs.xml.dist              export-ignore
+phpstan.neon.dist           export-ignore
+psalm.xml                   export-ignore
+sonar-project.properties    export-ignore

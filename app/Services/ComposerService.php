@@ -57,6 +57,10 @@ class ComposerService
      */
     public function listMyArtJaubPackagesPaths(): array
     {
+        if (getenv('HOME') === false) {
+            putenv('HOME=' . Webtrees::DATA_DIR);
+        }
+
         $composer = Factory::create(new NullIO(), Webtrees::ROOT_DIR . 'composer.json');
 
         $packages = $composer->getRepositoryManager()

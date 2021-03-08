@@ -1,11 +1,11 @@
 
-/docs/*
-/tmp/*
+/build/
+/docs/
+/tmp/
 /vendor/
 
 /.project
 /.settings
-
 
 /.buildpath
 
