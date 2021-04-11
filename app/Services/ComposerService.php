@@ -100,7 +100,8 @@ class ComposerService
             [$package]
         );
         array_shift($package_map);
-        $autoloads = $autoload_generator->parseAutoloads($package_map, $composer->getPackage());
+        $autoloads = count($package_map) == 0 ? ['psr-4' => []] :
+            $autoload_generator->parseAutoloads($package_map, $composer->getPackage());
         $psr4_paths = [];
         foreach ($autoloads['psr-4'] as $psr4_ns_paths) {
             foreach ($psr4_ns_paths as $psr4_ns_path) {

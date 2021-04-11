@@ -189,16 +189,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "2.0.11",
+            "version": "2.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "a5a5632da0b1c2d6fa9a3b65f1f4e90d1f04abb9"
+                "reference": "6c12ce263da71641903e399c3ce8ecb08fd375fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/a5a5632da0b1c2d6fa9a3b65f1f4e90d1f04abb9",
-                "reference": "a5a5632da0b1c2d6fa9a3b65f1f4e90d1f04abb9",
+                "url": "https://api.github.com/repos/composer/composer/zipball/6c12ce263da71641903e399c3ce8ecb08fd375fb",
+                "reference": "6c12ce263da71641903e399c3ce8ecb08fd375fb",
                 "shasum": ""
             },
             "require": {
@@ -266,7 +266,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/composer/issues",
-                "source": "https://github.com/composer/composer/tree/2.0.11"
+                "source": "https://github.com/composer/composer/tree/2.0.12"
             },
             "funding": [
                 {
@@ -282,7 +282,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-24T13:57:23+00:00"
+            "time": "2021-04-01T08:14:59+00:00"
         },
         {
             "name": "composer/semver",
@@ -1562,16 +1562,16 @@
         },
         {
             "name": "gettext/php-scanner",
-            "version": "v1.2.2",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-gettext/PHP-Scanner.git",
-                "reference": "63d51640119d46f40ca2094a0a7963a83f73801b"
+                "reference": "7a9f21b8a0c7fefdd696ff61e4322dc3aeaad113"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-gettext/PHP-Scanner/zipball/63d51640119d46f40ca2094a0a7963a83f73801b",
-                "reference": "63d51640119d46f40ca2094a0a7963a83f73801b",
+                "url": "https://api.github.com/repos/php-gettext/PHP-Scanner/zipball/7a9f21b8a0c7fefdd696ff61e4322dc3aeaad113",
+                "reference": "7a9f21b8a0c7fefdd696ff61e4322dc3aeaad113",
                 "shasum": ""
             },
             "require": {
@@ -1612,7 +1612,12 @@
                 "scanner",
                 "translation"
             ],
-            "time": "2021-01-12T20:12:27+00:00"
+            "support": {
+                "email": "oom@oscarotero.com",
+                "issues": "https://github.com/php-gettext/PHP-Scanner/issues",
+                "source": "https://github.com/php-gettext/PHP-Scanner/tree/v1.3.0"
+            },
+            "time": "2021-04-01T15:08:52+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
