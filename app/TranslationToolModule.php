@@ -53,7 +53,7 @@ class TranslationToolModule extends AbstractModule implements ModuleMyArtJaubInt
 
     public function customModuleVersion(): string
     {
-        return '2.0.11-v.2';
+        return '2.1.0-v.1';
     }
 
     /**

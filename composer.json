@@ -30,8 +30,8 @@
 		"fisharebest/localization" : "~1.0",
 		"gettext/gettext" : "~5.0",
 		"gettext/php-scanner" : "~1.0",
-		"fisharebest/webtrees" : "~2.0,>=2.0.6",
-		"jon48/webtrees-lib" : "dev-feature/2.0"
+		"fisharebest/webtrees" : "dev-main",
+		"jon48/webtrees-lib" : "dev-main"
 	},
 	"require-dev" : {
 		"phpstan/phpstan-deprecation-rules" : "^0.12.6",
