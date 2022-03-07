@@ -4,10 +4,10 @@ parameters:
    paths:
       - app
       - resources
+   checkExplicitMixed: false
    ignoreErrors:
       - '#^Call to an undefined method Aura\\Router\\Map::extras\(\)\.$#'
       -
          message: '#^Short ternary operator is not allowed.#'
          path: app\Services\SourceCodeService.php
-         count: 4
-   checkMissingIterableValueType: false
+         count: 2

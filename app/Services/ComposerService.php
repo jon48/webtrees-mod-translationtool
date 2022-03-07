@@ -22,11 +22,9 @@ use Fisharebest\Webtrees\Webtrees;
 
 /**
  * Service for accessing Composer data for the root package
- *
  */
 class ComposerService
 {
-
     /**
      * Checks whether a Composer package is a MyArtJaub one.
      *
@@ -53,7 +51,7 @@ class ComposerService
      *              1 => Array of normalised paths
      *          ]
      *
-     * @return array
+     * @return array<array<PackageInterface|array<string>>>
      */
     public function listMyArtJaubPackagesPaths(): array
     {
@@ -67,8 +65,7 @@ class ComposerService
             ->getLocalRepository()
             ->getPackages();
 
-        /** @var array<PackageInterface> $maj_packages */
-        $maj_packages = array();
+        $maj_packages = [];
         foreach ($packages as $package) {
             if ($this->isMyArtJaubPackage($package)) {
                 $maj_packages[] = $this->extractPsr4Paths($composer, $package);
@@ -88,7 +85,7 @@ class ComposerService
      *
      * @param Composer $composer
      * @param PackageInterface $package
-     * @return array
+     * @return array<PackageInterface|array<string>>
      */
     private function extractPsr4Paths(Composer $composer, PackageInterface $package): array
     {
@@ -105,7 +102,9 @@ class ComposerService
         $psr4_paths = [];
         foreach ($autoloads['psr-4'] as $psr4_ns_paths) {
             foreach ($psr4_ns_paths as $psr4_ns_path) {
-                $psr4_paths[] = realpath($psr4_ns_path);
+                if (false !== $real_path = realpath($psr4_ns_path)) {
+                    $psr4_paths[] = $real_path;
+                }
             }
         }
         return [$package, $psr4_paths];

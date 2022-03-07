@@ -26,33 +26,30 @@ use ReflectionClass;
  */
 class TranslationsAnalyzer
 {
-
-
-
     /** @var SourceCodeService $sourcecode_service */
     private $sourcecode_service;
 
     /**
      * List of items to be translated found in the code.
-     * @var ?Collection $strings_to_translate
+     * @var ?Collection<string, array{headers: \Gettext\Headers, translation: Translation}> $strings_to_translate
      */
     private $strings_to_translate;
 
     /**
      * List of translations loaded through the standard I18N library.
-     * @var ?Collection $loaded_translations
+     * @var ?Collection<string, string> $loaded_translations
      */
     private $loaded_translations;
 
     /**
      * List of translations loaded within the MyArtJaub modules
-     * @var ?Collection $maj_translations
+     * @var ?Collection<string, array<string, string>> $maj_translations
      */
     private $maj_translations;
 
     /**
      * List of paths for source code
-     * @var Collection $source_code_paths
+     * @var Collection<string, array<string>> $source_code_paths
      */
     private $source_code_paths;
 
@@ -66,7 +63,7 @@ class TranslationsAnalyzer
      * Constructor for TranslationAnalyzer
      *
      * @param SourceCodeService $sourcecode_service
-     * @param Collection $code_paths
+     * @param Collection<string, array<string>> $code_paths
      * @param string $language
      */
     public function __construct(SourceCodeService $sourcecode_service, Collection $code_paths, string $language = null)
@@ -105,11 +102,11 @@ class TranslationsAnalyzer
      * The returned structure is an associative Collection with :
      *      - key: MD5 hash of the Translation key
      *      - value: array [
-     *              0 => GetText Translations Header (including domain)
-     *              1 => GetTex Translation
+     *              headers => GetText Translations Header (including domain)
+     *              translation => GetTex Translation
      *          ]
      *
-     * @return Collection
+     * @return Collection<string, array{headers: \Gettext\Headers, translation: \Gettext\Translation}>
      */
     private function stringsToTranslate(): Collection
     {
@@ -120,7 +117,10 @@ class TranslationsAnalyzer
             foreach ($strings_to_translate_list as $translations) {
                 foreach ($translations as $translation) {
                     $key = md5($this->getTranslationKey($translation));
-                    $this->strings_to_translate->put($key, [$translations->getHeaders(), $translation]);
+                    $this->strings_to_translate->put($key, [
+                        'headers' => $translations->getHeaders(),
+                        'translation' => $translation
+                    ]);
                 }
             }
         }
@@ -133,7 +133,7 @@ class TranslationsAnalyzer
      *      - key: Original translation key
      *      - value: Translated string
      *
-     * @return Collection
+     * @return Collection<string, string>
      */
     private function loadedTranslations(): Collection
     {
@@ -141,7 +141,7 @@ class TranslationsAnalyzer
             $I18N_class = new ReflectionClass(I18N::class);
             $translator_property = $I18N_class->getProperty('translator');
             $translator_property->setAccessible(true);
-            $wt_translator = $translator_property->getValue();
+            $wt_translator = (object) $translator_property->getValue();
 
             $translator_class = new ReflectionClass(get_class($wt_translator));
             $translations_property = $translator_class->getProperty('translations');
@@ -160,7 +160,7 @@ class TranslationsAnalyzer
      *              1 => Translation key
      *          ]
      *
-     * @return Collection
+     * @return Collection<string, array<string, string>>
      */
     private function loadedMyArtJaubTranslations(): Collection
     {
@@ -170,7 +170,7 @@ class TranslationsAnalyzer
             $this->maj_translations = new Collection();
             foreach ($maj_translations_list as $module => $maj_mod_translations) {
                 foreach (array_keys($maj_mod_translations) as $maj_mod_translation) {
-                    $this->maj_translations->put(md5((string) $maj_mod_translation), [$module, $maj_mod_translation]);
+                    $this->maj_translations->put(md5($maj_mod_translation), [$module, $maj_mod_translation]);
                 }
             }
         }
@@ -186,17 +186,17 @@ class TranslationsAnalyzer
      * Returns the translations missing through the standard I18N.
      * The returned array is composed of items with the structure:
      *      - array [
-     *              0 => GetText Translations Header (including domain)
-     *              1 => GetTex Translation
+     *              headers => GetText Translations Header (including domain)
+     *              translation => GetTex Translation
      *          ]
      *
-     * @return array
+     * @return array<array{headers: \Gettext\Headers, translation: \Gettext\Translation}>
      */
     public function missingTranslations(): array
     {
         $missing_translations = array();
         foreach ($this->stringsToTranslate() as $translation_info) {
-            list(, $translation) = $translation_info;
+            $translation = $translation_info['translation'];
             if (!$this->loadedTranslations()->has($this->getTranslationKey($translation))) {
                 $missing_translations[] = $translation_info;
             }
@@ -213,11 +213,11 @@ class TranslationsAnalyzer
      *              1 => Translation key
      *          ]
      *
-     * @return array
+     * @return array<array<string, string>>
      */
     public function nonUsedMajTranslations(): array
     {
-        $removed_translations = array();
+        $removed_translations = [];
         $strings_to_translate_list = $this->stringsToTranslate();
         foreach ($this->loadedMyArtJaubTranslations() as $msgid => $translation_info) {
             if (!$strings_to_translate_list->has($msgid)) {
@@ -234,14 +234,14 @@ class TranslationsAnalyzer
      *      nbTranslationsFound: total number of translations found in the code
      *      nbMajTranslations: total number of translations loaded in the MyArtJaub modules
      *
-     * @return array
+     * @return array<string, int>
      */
     public function translationsStatictics(): array
     {
-        return array(
+        return [
             'nbTranslations' => $this->loadedTranslations()->count(),
             'nbTranslationsFound' => $this->stringsToTranslate()->count(),
             'nbMajTranslations' => $this->loadedMyArtJaubTranslations()->count()
-        );
+        ];
     }
 }

@@ -27,7 +27,6 @@ use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
  */
 class SourceCodeService
 {
-
     /**
      * Gettext Translations merge strategy to be used - Use Theirs data
      * @var int MERGE_STRATEGY_THEIRS
@@ -42,7 +41,7 @@ class SourceCodeService
 
     /**
      * I18N functions to be looked for in the code
-     * @var array
+     * @var array<string, string>
      */
     private const I18N_FUNCTIONS = [
         'translate' => 'gettext',
@@ -55,7 +54,7 @@ class SourceCodeService
      * This contains the MyArtJaub modules's resources folder,
      * as well as MyArtJaub modules PSR-4 autoloading paths loaded through Composer
      *
-     * @return Collection
+     * @return Collection<string, array<string>>
      */
     public function sourceCodePaths(): Collection
     {
@@ -71,7 +70,7 @@ class SourceCodeService
             $installer_name = $maj_package->getExtra()['installer-name'] ?? '';
             $key = $installer_name === '' ? $maj_package->getName() : '_' . $installer_name . '_';
             if (count($psr4_paths) > 0) {
-                $paths->put($key, array_merge($paths->get($key, []), $psr4_paths));
+                $paths->put($key, [...$paths->get($key, []), ...$psr4_paths]);
             }
         }
 
@@ -84,8 +83,8 @@ class SourceCodeService
      *      - key: package/domain
      *      - value: Gettext Translations object for that domain
      *
-     * @param Collection $source_code_paths
-     * @return Collection
+     * @param Collection<string, array<string>> $source_code_paths
+     * @return Collection<string, Translations>
      */
     public function findStringsToTranslate(Collection $source_code_paths): Collection
     {
@@ -93,8 +92,8 @@ class SourceCodeService
         foreach ($source_code_paths as $package => $paths) {
             $php_files = array();
             foreach ($paths as $path) {
-                $php_files = array_merge($php_files, $this->glob_recursive($path . '/*.php') ?: array());
-                $php_files = array_merge($php_files, $this->glob_recursive($path . '/*.phtml') ?: array());
+                $php_files = [...$php_files, ...$this->glob_recursive($path . '/*.php')];
+                $php_files = [...$php_files, ...$this->glob_recursive($path . '/*.phtml')];
             }
 
             $php_scanner = new PhpScanner(Translations::create($package));
@@ -123,7 +122,7 @@ class SourceCodeService
      *      - value: array of translations for the module
      *
      * @param string $language
-     * @return Collection
+     * @return Collection<string, array<string,string>>
      */
     public function listMyArtJaubTranslations(string $language): Collection
     {
@@ -138,7 +137,7 @@ class SourceCodeService
      *
      * @param string $pattern
      * @param int $flags
-     * @return string[]
+     * @return array<int, string>
      * @see glob()
      * @phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
      */
@@ -148,7 +147,7 @@ class SourceCodeService
         $dirs = glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT) ?: [];
 
         foreach ($dirs as $dir) {
-            $files = array_merge($files, $this->glob_recursive($dir . '/' . basename($pattern), $flags));
+            $files = [...$files, ...$this->glob_recursive($dir . '/' . basename($pattern), $flags)];
         }
 
         return $files;
