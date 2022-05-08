@@ -4,9 +4,11 @@ parameters:
    paths:
       - app
       - resources
+   fileExtensions:
+      - php
+      - phtml
    checkExplicitMixed: false
    ignoreErrors:
-      - '#^Call to an undefined method Aura\\Router\\Map::extras\(\)\.$#'
       -
          message: '#^Short ternary operator is not allowed.#'
          path: app\Services\SourceCodeService.php

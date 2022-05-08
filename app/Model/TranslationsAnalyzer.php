@@ -6,7 +6,7 @@
  * @package MyArtJaub\Webtrees\Module
  * @subpackage TranslationTool
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2016-2020, Jonathan Jaubart
+ * @copyright Copyright (c) 2016-2022, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
 
@@ -43,7 +43,7 @@ class TranslationsAnalyzer
 
     /**
      * List of translations loaded within the MyArtJaub modules
-     * @var ?Collection<string, array<string, string>> $maj_translations
+     * @var ?Collection<string, array<string>> $maj_translations
      */
     private $maj_translations;
 
@@ -160,7 +160,7 @@ class TranslationsAnalyzer
      *              1 => Translation key
      *          ]
      *
-     * @return Collection<string, array<string, string>>
+     * @return Collection<string, array<string>>
      */
     private function loadedMyArtJaubTranslations(): Collection
     {
@@ -213,7 +213,7 @@ class TranslationsAnalyzer
      *              1 => Translation key
      *          ]
      *
-     * @return array<array<string, string>>
+     * @return array<array<string>>
      */
     public function nonUsedMajTranslations(): array
     {

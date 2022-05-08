@@ -21,6 +21,9 @@
 		"issues" : "https://github.com/jon48/webtrees-mod-translationtool/issues"
 	},
 	"config": {
+		"platform" : {
+			"php" : "7.4"
+		},
 		"allow-plugins": {
 			"composer/package-versions-deprecated": true
 		}
@@ -35,8 +38,8 @@
 		"fisharebest/localization" : "~1.0",
 		"gettext/gettext" : "~5.0",
 		"gettext/php-scanner" : "~1.0",
-		"fisharebest/webtrees" : "2.1.0-alpha.1",
-		"jon48/webtrees-lib" : "dev-feature/2.1-dev"
+		"fisharebest/webtrees" : "~2.1.1",
+		"jon48/webtrees-lib" : "dev-main"
 	},
 	"require-dev" : {
 		"phpstan/phpstan-deprecation-rules" : "^1.0",

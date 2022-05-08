@@ -5,7 +5,7 @@
  * @package MyArtJaub\Webtrees\Tools
  * @subpackage Module
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2016-2020, Jonathan Jaubart
+ * @copyright Copyright (c) 2016-2022, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
 namespace MyArtJaub\Webtrees\Module\TranslationTool;

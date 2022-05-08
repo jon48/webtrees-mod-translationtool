@@ -3,6 +3,8 @@ filter:
        - app/*
        - resources/*
 build:
+    environment:
+        php: 8.0
     nodes:
         analysis:
             tests:

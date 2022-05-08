@@ -12,11 +12,12 @@ jobs:
     name: phpcs PHP/PHTML
 
     steps:
-      - uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - run: composer global require squizlabs/php_codesniffer=* --quiet
+      - run: composer validate
 
-      - name: PHP
+      - run: composer global require squizlabs/php_codesniffer
+
+      - name: PHPCS
         run: ~/.composer/vendor/bin/phpcs -s

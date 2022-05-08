@@ -17,13 +17,13 @@ Administration module for webtrees to report the status of translations in MyArt
 ### License
 
 * **webtrees-mod-translationtool: MyArtJaub Translation Tool Module for webtrees**
-* Copyright (C) 2016 to 2020 Jonathan Jaubart.
-* Derived from **webtrees** - Copyright (C) 2010 to 2020  webtrees development team.
+* Copyright (C) 2016 to 2022 Jonathan Jaubart.
+* Derived from **webtrees** - Copyright (C) 2010 to 2022  webtrees development team.
 * Derived from PhpGedView - Copyright (C) 2002 to 2010  PGV Development Team.
 
 This program is free software; you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later version.
+Foundation; either version 3 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A

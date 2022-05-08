@@ -9,8 +9,14 @@ on:
 jobs:
 
   phpstan:
-    runs-on: ubuntu-latest
     name: phpstan
+
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-version: ['7.4', '8.0', '8.1']
+
+    runs-on: ${{ matrix.operating-system }}
 
     steps:
       - name: Checkout code
@@ -19,7 +25,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@master
         with:
-          php-version: 7.4
+          php-version: ${{ matrix.php-version }}
           extensions: gd,intl,mbstring,sqlite,zip
           coverage: disable
 
@@ -30,8 +36,14 @@ jobs:
       - run: ~/.composer/vendor/bin/phpstan analyze --no-progress
       
   psalm:
-    runs-on: ubuntu-latest
     name: psalm
+
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-version: ['7.4', '8.0', '8.1']
+
+    runs-on: ${{ matrix.operating-system }}
 
     steps:
       - name: Checkout code
@@ -40,7 +52,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@master
         with:
-          php-version: 7.4
+          php-version: ${{ matrix.php-version }}
           extensions: gd,intl,mbstring,sqlite,zip
           coverage: disable
 
