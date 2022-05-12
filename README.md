@@ -1,4 +1,4 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jon48/webtrees-mod-translationtool/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jon48/webtrees-mod-translationtool/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jon48/webtrees-mod-translationtool/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/jon48/webtrees-mod-translationtool/?branch=main)
 [![Code Climate](https://codeclimate.com/github/jon48/webtrees-mod-translationtool/badges/gpa.svg)](https://codeclimate.com/github/jon48/webtrees-mod-translationtool)
 ![Licence](https://img.shields.io/github/license/jon48/webtrees-mod-translationtool)
 
