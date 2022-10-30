@@ -18,7 +18,10 @@ use Composer\Composer;
 use Composer\Factory;
 use Composer\IO\NullIO;
 use Composer\Package\PackageInterface;
+use Fisharebest\Webtrees\FlashMessages;
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Webtrees;
+use Exception;
 
 /**
  * Service for accessing Composer data for the root package
@@ -59,17 +62,25 @@ class ComposerService
             putenv('HOME=' . Webtrees::DATA_DIR);
         }
 
-        $composer = Factory::create(new NullIO(), Webtrees::ROOT_DIR . 'composer.json');
-
-        $packages = $composer->getRepositoryManager()
-            ->getLocalRepository()
-            ->getPackages();
-
         $maj_packages = [];
-        foreach ($packages as $package) {
-            if ($this->isMyArtJaubPackage($package)) {
-                $maj_packages[] = $this->extractPsr4Paths($composer, $package);
+        try {
+            $composer = Factory::create(new NullIO(), Webtrees::ROOT_DIR . 'composer.json');
+
+            $packages = $composer->getRepositoryManager()
+                ->getLocalRepository()
+                ->getPackages();
+
+            foreach ($packages as $package) {
+                if ($this->isMyArtJaubPackage($package)) {
+                    $maj_packages[] = $this->extractPsr4Paths($composer, $package);
+                }
             }
+        } catch (Exception $ex) {
+            FlashMessages::addMessage(
+                I18N::translate('No composer.json file could be loaded, some translations may be missing.') . '<br>' .
+                I18N::translate('This is expected when not running from a development instance.'),
+                'warning'
+            );
         }
 
         return $maj_packages;

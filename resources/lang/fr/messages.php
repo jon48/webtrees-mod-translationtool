@@ -25,5 +25,9 @@ return array (
                                     =>  'Nombre de traductions dans les modules MyArtJaub',
     'Paths for source code'         =>  'Chemins du code source',
     'References'                    =>  'Références',
+    'No composer.json file could be loaded, some translations may be missing.'
+                                    =>  'Aucun fichier composer.json n’a pu être chargé, certaines traductions peuvent manquer.',
+    'This is expected when not running from a development instance.'
+                                    =>  'Ceci est normal lorsqu’il ne s’agit pas d’une instance de développement.'
 
 );
