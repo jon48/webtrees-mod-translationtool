@@ -35,11 +35,11 @@
 	},
 	"require" : {
 		"composer/composer" : "^1.0|^2.0",
-		"fisharebest/localization" : "~1.0",
-		"gettext/gettext" : "~5.0",
-		"gettext/php-scanner" : "~1.0",
-		"fisharebest/webtrees" : "~2.1.1",
-		"jon48/webtrees-lib" : "dev-main"
+		"fisharebest/localization" : "^1.0",
+		"gettext/gettext" : "^5.0",
+		"gettext/php-scanner" : "^1.0",
+		"fisharebest/webtrees" : "~2.1.8",
+		"jon48/webtrees-lib" : "dev-main-2.1 as dev-main"
 	},
 	"require-dev" : {
 		"phpstan/phpstan-deprecation-rules" : "^1.0",

@@ -70,7 +70,7 @@ class SourceCodeService
             $installer_name = $maj_package->getExtra()['installer-name'] ?? '';
             $key = $installer_name === '' ? $maj_package->getName() : '_' . $installer_name . '_';
             if (count($psr4_paths) > 0) {
-                $paths->put($key, [...$paths->get($key, []), ...$psr4_paths]);
+                $paths->put($key, array_merge($paths->get($key, []), $psr4_paths));
             }
         }
 

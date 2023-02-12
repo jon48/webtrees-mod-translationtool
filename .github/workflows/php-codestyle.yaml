@@ -13,11 +13,11 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - run: composer validate
 
-      - run: composer global require squizlabs/php_codesniffer
+      - run: composer global require squizlabs/php_codesniffer=* --quiet
 
       - name: PHPCS
         run: ~/.composer/vendor/bin/phpcs -s
