@@ -10,6 +10,4 @@ parameters:
    checkExplicitMixed: false
    ignoreErrors:
       -
-         message: '#^Short ternary operator is not allowed.#'
-         path: app\Services\SourceCodeService.php
-         count: 2
+         identifier: varTag.type

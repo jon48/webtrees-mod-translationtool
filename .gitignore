@@ -1,11 +1,17 @@
-
 /build/
 /docs/
 /tmp/
-/vendor/
 
 /.project
 /.settings
+
+# Composer
+/vendor/
+/vendor-bin/*/vendor/
+
+# PhpUnit
+/tests/*.xml
+/tests/coverage
 
 /.buildpath
 

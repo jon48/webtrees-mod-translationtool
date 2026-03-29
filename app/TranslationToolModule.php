@@ -33,51 +33,37 @@ class TranslationToolModule extends AbstractModule implements ModuleMyArtJaubInt
     use ModuleMyArtJaubTrait;
     use ModuleConfigTrait;
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return I18N::translate('Translation Tool');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
-     */
+    #[\Override]
     public function description(): string
     {
         return I18N::translate('Manage webtrees translation.');
     }
 
+    #[\Override]
     public function customModuleVersion(): string
     {
-        return '2.1.8-v.1';
+        return '2.1.8-v.2';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::isEnabledByDefault()
-     */
+    #[\Override]
     public function isEnabledByDefault(): bool
     {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleSupportUrl()
-     */
+    #[\Override]
     public function customModuleSupportUrl(): string
     {
         return 'https://github.com/jon48/webtrees-mod-translationtool';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
-     */
+    #[\Override]
     public function loadRoutes(Map $router): void
     {
         $router->attach('', '', static function (Map $router): void {
@@ -95,10 +81,7 @@ class TranslationToolModule extends AbstractModule implements ModuleMyArtJaubInt
         });
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleConfigInterface::getConfigLink()
-     */
+    #[\Override]
     public function getConfigLink(): string
     {
         return route(TranslationStatus::class);

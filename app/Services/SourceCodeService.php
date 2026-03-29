@@ -49,6 +49,18 @@ class SourceCodeService
         'translateContext' => 'pgettext'
     ];
 
+    /** @var ModuleService $module_service */
+    private $module_service;
+
+    /** @var ComposerService $composer_service */
+    private $composer_service;
+
+    public function __construct(ModuleService $module_service, ComposerService $composer_service)
+    {
+        $this->module_service = $module_service;
+        $this->composer_service = $composer_service;
+    }
+
     /**
      * Lists all paths containing source code to be scanned for translations.
      * This contains the MyArtJaub modules's resources folder,
@@ -58,12 +70,13 @@ class SourceCodeService
      */
     public function sourceCodePaths(): Collection
     {
-        $paths = app(ModuleService::class)->findByInterface(ModuleMyArtJaubInterface::class)
+        $paths = $this->module_service->findByInterface(ModuleMyArtJaubInterface::class)
             ->mapWithKeys(function (ModuleMyArtJaubInterface $module): array {
-                return [$module->name() => [realpath($module->resourcesFolder())]];
-            });
+                $mod_path = realpath($module->resourcesFolder());
+                return [$module->name() => $mod_path === false ? [] : [$mod_path]];
+            })->reject(fn(array $value): bool => count($value) === 0);
 
-        $maj_packages = app(ComposerService::class)->listMyArtJaubPackagesPaths();
+        $maj_packages = $this->composer_service->listMyArtJaubPackagesPaths();
 
         foreach ($maj_packages as list($maj_package, $psr4_paths)) {
             /** @var PackageInterface $maj_package */
@@ -74,6 +87,7 @@ class SourceCodeService
             }
         }
 
+        /** @var Collection<string, array<string>> $paths */
         return $paths;
     }
 
@@ -126,28 +140,33 @@ class SourceCodeService
      */
     public function listMyArtJaubTranslations(string $language): Collection
     {
-        return app(ModuleService::class)->findByInterface(ModuleMyArtJaubInterface::class)
+        $translations = $this->module_service->findByInterface(ModuleMyArtJaubInterface::class)
             ->mapWithKeys(function (ModuleMyArtJaubInterface $module) use ($language): array {
                 return [$module->name() => $module->customTranslations($language)];
             });
+
+        /** @var Collection<string, array<string, string>> $translations */
+        return $translations;
     }
 
     /**
      * Extension of the standard PHP glob function to apply it recursively.
      *
      * @param string $pattern
-     * @param int $flags
      * @return array<int, string>
      * @see glob()
      * @phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
      */
-    protected function glob_recursive(string $pattern, int $flags = 0): array
+    protected function glob_recursive(string $pattern): array
     {
-        $files = glob($pattern, $flags) ?: [];
-        $dirs = glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT) ?: [];
+        $files_glob = glob($pattern);
+        $files = $files_glob === false ? [] : $files_glob;
+
+        $dirs_glob = glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT);
+        $dirs = $dirs_glob === false ? [] : $dirs_glob;
 
         foreach ($dirs as $dir) {
-            $files = [...$files, ...$this->glob_recursive($dir . '/' . basename($pattern), $flags)];
+            $files = [...$files, ...($this->glob_recursive($dir . '/' . basename($pattern)))];
         }
 
         return $files;

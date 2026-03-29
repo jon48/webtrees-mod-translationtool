@@ -72,10 +72,11 @@ use Fisharebest\Webtrees\Http\RequestHandlers\ModulesAllPage;
             <?php foreach ($missing_translations as $missing_info) : ?>
                 <?php  $references = collect($missing_info['translation']->getReferences()->toArray())->sortKeys()
                       ->flatMap(function (array $ref_lines, string $ref_file) {
-                          $ref_file_path = realpath($ref_file);
-                          return collect($ref_lines)->sort()->map(function (int $ref_line) use ($ref_file_path) {
-                              return '<small><samp>' . e($ref_file_path . ':' . $ref_line) . '</samp></small>';
-                          });
+                        $ref_file_path = realpath($ref_file);
+                        if ($ref_file_path === false) { return ''; }
+                        return collect($ref_lines)->sort()->map(function (int $ref_line) use ($ref_file_path) {
+                            return '<small><samp>' . e($ref_file_path . ':' . $ref_line) . '</samp></small>';
+                        });
                       }); ?>
             <tr>
                 <td><?= e((string) $missing_info['headers']->getDomain()) ?></td>

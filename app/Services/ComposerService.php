@@ -37,7 +37,7 @@ class ComposerService
     public function isMyArtJaubPackage(PackageInterface $package): bool
     {
         list($vendor) = explode('/', $package->getName(), 2);
-        return $vendor == self::MYARTJAUB_VENDOR;
+        return $vendor === self::MYARTJAUB_VENDOR;
     }
 
     /**
@@ -54,7 +54,7 @@ class ComposerService
      *              1 => Array of normalised paths
      *          ]
      *
-     * @return array<array<PackageInterface|array<string>>>
+     * @return array<array{0: PackageInterface, 1: array<string>}>
      */
     public function listMyArtJaubPackagesPaths(): array
     {
@@ -96,7 +96,7 @@ class ComposerService
      *
      * @param Composer $composer
      * @param PackageInterface $package
-     * @return array<PackageInterface|array<string>>
+     * @return array{0: PackageInterface, 1: array<string>}
      */
     private function extractPsr4Paths(Composer $composer, PackageInterface $package): array
     {
@@ -108,7 +108,7 @@ class ComposerService
             [$package]
         );
         array_shift($package_map);
-        $autoloads = count($package_map) == 0 ? ['psr-4' => []] :
+        $autoloads = count($package_map) === 0 ? ['psr-4' => []] :
             $autoload_generator->parseAutoloads($package_map, $composer->getPackage());
         $psr4_paths = [];
         foreach ($autoloads['psr-4'] as $psr4_ns_paths) {

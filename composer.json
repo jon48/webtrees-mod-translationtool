@@ -25,7 +25,8 @@
 			"php" : "7.4"
 		},
 		"allow-plugins": {
-			"composer/package-versions-deprecated": true
+			"composer/package-versions-deprecated": true,
+			"bamarni/composer-bin-plugin": true
 		}
 	},
 	"autoload" : {
@@ -37,23 +38,26 @@
 		"composer/composer" : "^1.0|^2.0",
 		"fisharebest/localization" : "^1.0",
 		"gettext/gettext" : "^5.0",
-		"gettext/php-scanner" : "^1.0",
-		"fisharebest/webtrees" : "~2.1.8",
-		"jon48/webtrees-lib" : "dev-main-2.1 as dev-main"
+		"gettext/php-scanner" : "^2.0",
+		"fisharebest/webtrees" : "~2.1.26",
+		"jon48/webtrees-lib" : "dev-main-2.1 as dev-main",
+		"league/commonmark": "2.8.2 as 2.8.0"
 	},
 	"require-dev" : {
-		"phpstan/phpstan-deprecation-rules" : "^1.0",
-		"phpstan/phpstan-phpunit" : "^1.0",
-		"phpstan/phpstan-strict-rules" : "^1.0"
+		"bamarni/composer-bin-plugin": "^1.8"
 	},
 	"scripts" : {
-		"webtrees-mod-translationtool:phpcs" : "phpcs -s",
-		"webtrees-mod-translationtool:phpcbf" : "phpcbf",
-		"webtrees-mod-translationtool:phpstan" : "phpstan analyze",
+		"webtrees-mod-translationtool:phpcs" : "./vendor-bin/php-cs/vendor/bin/phpcs -s --exclude=Generic.Files.LineEndings",
+		"webtrees-mod-translationtool:phpcbf" : "./vendor-bin/php-cs/vendor/bin/phpcbf --exclude=Generic.Files.LineEndings",
+		"webtrees-mod-translationtool:phpstan" : "./vendor-bin/phpstan/vendor/bin/phpstan analyze --no-progress",
 		"webtrees-mod-translationtool:psalm" : "psalm",
 		"webtrees-mod-translationtool:sonar" : "sonar-scanner"
 	},
 	"extra" : {
-		"installer-name" : "myartjaub_translationtool"
+		"installer-name" : "myartjaub_translationtool",
+		"bamarni-bin": {
+            "bin-links": false,
+			"forward-command": true
+        }
 	}
 }
