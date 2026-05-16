@@ -5,6 +5,11 @@
 
 RoboFile.php    export-ignore
 
+# Composer
+composer.json   export-ignore
+composer.lock   export-ignore
+vendor-bin      export-ignore
+
 # CI tools
 .github/                    export-ignore
 .scrutinizer.yml            export-ignore
